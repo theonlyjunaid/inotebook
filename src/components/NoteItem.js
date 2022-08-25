@@ -15,7 +15,7 @@ function NoteItem(props) {
 
                     <button onClick={() => updateNote(note)}><i className="far fa-edit mx-2" ></i></button>
 
-                    <button onClick={() => deleteNote(note._id)}> <i className="far fa-trash-alt mx-2" ></i></button>
+                    <button onClick={() => { deleteNote(note._id); props.showAlert("Note Deleted Seccessfully", "danger") }}> <i className="far fa-trash-alt mx-2" ></i></button>
                 </div>
             </div>
         </div>

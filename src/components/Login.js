@@ -19,12 +19,13 @@ const Login = (props) => {
         console.log(json);
         if (json.success) {
             // Save the auth token and redirect
-            localStorage.setItem('token', json.authtoken);
+            localStorage.setItem('token', json.jwnData);
+            props.showAlert({ message: "Account login succesfully", type: 'success' })
             history("/");
 
         }
         else {
-            alert("Invalid credentials");
+            props.showAlert({ message: "invalid credentials", type: 'danger' })
         }
     }
 

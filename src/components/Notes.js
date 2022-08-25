@@ -1,18 +1,27 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import NoteContext from '../context/notes/NoteContext';
 import AddNote from './AddNote';
+import { useNavigate } from 'react-router-dom';
 import NoteItem from './NoteItem';
-const Notes = () => {
+const Notes = (props) => {
+    let navigatorr = useNavigate()
     const context = useContext(NoteContext);
     const { notes, getNotes, editNote } = context
     const [note, setNote,] = useState({ id: "", etitle: "", edescription: "", etag: "" });
 
     useEffect(() => {
-        getNotes()
+        if (localStorage.getItem('token')) {
+            navigatorr("/")
+            getNotes()
+        } else {
+            navigatorr("/login")
+        }
+        //eslint-disable-next-line
     }, []);
     const updateNote = (currentNote) => {
         ref.current.click()
         setNote({ id: currentNote._id, etitle: currentNote.title, edescription: currentNote.description, etag: currentNote.tag, })
+
     }
     const ref = useRef(null)
     const refClose = useRef(null)
@@ -20,6 +29,7 @@ const Notes = () => {
         e.preventDefault()
         editNote(note.id, note.etitle, note.edescription, note.etag)
         refClose.current.click()
+        props.showAlert("Updated Succesfully", "success")
         console.log(note)
     }
     const onChange = (e) => {
@@ -27,7 +37,7 @@ const Notes = () => {
     }
     return (
         <>
-            <AddNote />
+            <AddNote showAlert={props.showAlert} />
 
             <button type="button" className="btn btn-primary d-none" ref={ref} data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Launch demo modal
@@ -71,7 +81,7 @@ const Notes = () => {
                 <h2>your notes</h2>
                 {notes.length === 0 && <div className="container">No notes to show</div>}
                 {notes.map((note, index) => {
-                    return <NoteItem note={note} key={index} updateNote={updateNote} />
+                    return <NoteItem note={note} key={index} showAlert={props.showAlert} updateNote={updateNote} />
                 })}
             </div>
         </>
